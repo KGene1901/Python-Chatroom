@@ -27,6 +27,8 @@ def receiveMsg(messages):
 	while True:
 		try:
 			recieved_msg = client_socket.recv(1024).decode()
+			if len(recieved_msg) == 0:
+				break
 			if '<<Available commands>>' in recieved_msg or '<<Users>>' in recieved_msg:
 				showMultilineMsg(messages, recieved_msg)
 			else:
@@ -39,6 +41,21 @@ def closeWindow(user_msg, chat_window):
 	sendMsg(user_msg, chat_window)
 
 def startClient():
+
+	username = ''
+	host = ''
+	port = ''
+
+	if len(sys.argv) != 4:
+		print('Insufficient connection information given, please try again!')
+		while not username and not host and not port:
+			username = str(input('Username: '))
+			host = str(input('Host: '))
+			port = str(input('Port: '))
+	else:
+		username = sys.argv[1]
+		host = sys.argv[2] 
+		port = sys.argv[3]	
 
 	### Initialise chat window ###
 	chat_window = Tk()
@@ -61,12 +78,6 @@ def startClient():
 
 	chat_window.protocol('WM_DELETE_WINDOW', lambda : closeWindow(user_msg, chat_window)) # gets invoked when user closes chat window
 	##############################
-
-	username = sys.argv[1]
-	host = sys.argv[2] 
-	port = sys.argv[3]	
-
-	## need to add input check for variables##
 
 	try:
 		client_socket.connect((host, int(port)))
