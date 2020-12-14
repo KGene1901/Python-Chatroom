@@ -11,7 +11,7 @@ This document outlines the protocol defined for communication between the client
 
 		=> in-app user commands:
 			- /help ==> To list all available user commands
-			- /rename <username> ==> To change your own username
+			- /rename <username> ==> To change your own username (NOTE: The username should contain no spaces - otherwise it will be cut off)
 			- /whisper <username> <message> ==> To privately message another user in the chatroom
 			- /listUsers ==> To list all current users in the chatroom
 			- /quit ==> To exit the chatroom
@@ -28,7 +28,7 @@ This document outlines the protocol defined for communication between the client
 			- /help ==> the server will send back a string (separated by line breaks "\n") which contains a list of user commands with their respective descriptions to only the client that requested for it (it is not broadcasted)
 			
 			- /rename <username> ==> if the username is already taken by another client, the server will send the error message "This username has been taken. Please try again with /rename <username>" back to the client who requested for the change
-								 ==> if the username is available, the server will allow it to happen and broadcast the message "{old username} has changed their username to {new username}" to all connected clients (even the client who requested for the name change)
+								==> if the username is available, the server will allow it to happen and broadcast the message "{old username} has changed their username to {new username}" to all connected clients (even the client who requested for the name change)
 
 			- /whisper <username> <message> ==> if the user requested is not in the server, the server will reject the request send the error message "This user does not exist" to the client that requested the private message
 											==> if the client tries to private message his/her ownself, the server will reject the request send the error message "Not allowed to private message your ownself!" to that client 
@@ -43,4 +43,12 @@ This document outlines the protocol defined for communication between the client
 
 4. 	Design choices:
 	
-   	My decision to choose multi-threading over select() to handle multiple client connections for the IM server was due to the fact that the overall structure was cleaner and easier to manage connection states. Furthermore, all regular messages and user commands (except "/quit") are coded to be handled by the server as I not only wanted to keep the client code simple, but to also ensure all responses and logic are centralized and standardized in the server side to allow easy code updates and improvements. For sending responses or redirecting messages, I created a separate function for broadcasting messages in the server side code to reduce code redundancy and for ease of use as it is dynamic (it can take in any string message) and it complements the built-in send/sendall function by sending to all connected clients. In terms of the client side, I made a simple GUI to allow better readability of chat and to make the application look more formal overall. I also ensured that a client was not able to send empty messages to the server to avoid a disconnection issue as the server might assume that the client was not active anymore.
+   		- My decision to choose multi-threading over select() to handle multiple client connections for the IM server was due to the fact that the overall code structure was cleaner and easier to manage in terms of connection states. 
+
+   		- Furthermore, all regular messages and user commands (except "/quit") are coded to be handled by the server as I not only wanted to keep the client code simple, but to also ensure all responses and logic are centralized and standardized in the server side to allow easy code updates and improvements. 
+
+   		- For sending responses or redirecting messages, I created a separate function for broadcasting messages in the server side code to reduce code redundancy and for ease of use as it is dynamic (it can take in any string messages) and it complements the built-in send/sendall function by sending to all connected clients. 
+
+   		- In terms of the client side, I made a simple GUI to allow better readability of chat and to make the application look more formal overall. 
+   		
+   		- I also ensured that a client was not able to send empty messages to the server to avoid a disconnection issue as the server might assume that the client was not active anymore.

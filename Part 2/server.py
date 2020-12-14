@@ -1,5 +1,4 @@
 import socket
-import select
 import sys
 from _thread import *
 
@@ -33,7 +32,7 @@ def clientThreadInit(connection, client_map, client_username, f):
 		elif '/rename' in client_msg:
 			split_msg = client_msg.split(' ')
 			if split_msg.index('/rename') == 0:
-				new_username = ' '.join(split_msg[1:])
+				new_username = split_msg[1] # ensures that all usernames do not contains spaces
 
 				if new_username in client_map: # validation check to avoid two users having the same username
 					error_msg = 'This username has been taken. Please try again with /rename <username>'
@@ -42,9 +41,9 @@ def clientThreadInit(connection, client_map, client_username, f):
 				else:
 					broadcast_msg = '{} has changed their username to {}'.format(client_username, new_username)
 					f.write('\n'+broadcast_msg)
-					broadcast_message(broadcast_message, client_map)
+					print(broadcast_msg)
+					broadcast_message(broadcast_msg, client_map)
 					client_map[new_username] = client_map.pop(client_username)
-					print(client_map)
 					client_username = new_username
 
 				continue
@@ -95,7 +94,7 @@ def clientThreadInit(connection, client_map, client_username, f):
 def startServer():
 
 	## initialising important variables ##
-	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)	# supporting TCP connection 
+	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)	# allows socket to be reusable
 	server_socket.bind((host, port))
 	client_map = {}
