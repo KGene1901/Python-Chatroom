@@ -21,11 +21,11 @@ def clientThreadInit(connection, client_map, client_username, f):
 
 		client_msg = client_msg.decode()
 		chat_display = '\n{}: {}'.format(client_username, client_msg)
-		f.write(client_msg)
+		f.write(chat_display)
 
 		if client_msg == '/help':
 			helpList = '<<Available commands>>\n/listUsers => To list all current users in the chatroom\n/rename <username> => Change your own username\n/whisper <username> <message> => To privately message another user in the chatroom\n/quit => Exit chatroom'
-			f.write('\n'+helpList)
+			f.write('\n\n'+helpList+'\n\n')
 			connection.sendall(helpList.encode())
 			continue
 
@@ -55,7 +55,7 @@ def clientThreadInit(connection, client_map, client_username, f):
 			for client in client_map:
 				availableUsers+=f'{count}. {client}\n'
 				count+=1
-			f.write('\n'+availableUsers)
+			f.write('\n\n'+availableUsers+'\n')
 			connection.sendall(availableUsers.encode())
 
 			continue
@@ -80,7 +80,6 @@ def clientThreadInit(connection, client_map, client_username, f):
 
 			continue
 
-		f.write(chat_display)
 		print(chat_display)
 		broadcast_message(chat_display, client_map)
 
