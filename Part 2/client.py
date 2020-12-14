@@ -31,11 +31,13 @@ def receiveMsg(messages):
 				showMultilineMsg(messages, recieved_msg)
 			else:
 				messages.insert(END, recieved_msg)
-		except OSError:	
-			try:
-				messages.insert(END, 'Server may be down - please hit <Send> to exit')
-			except:
-				print('Something is wrong with the server - attempting to close chat window')
+
+		except OSError as e:
+			error_code = e.args[0]
+			if error_code == 10053:
+				print('Connection close')
+			elif error_code == 10054:
+				messages.insert(END, 'Server has shut down - please close chat window')
 			break
 
 def closeWindow(user_msg, chat_window):
@@ -67,7 +69,7 @@ def startClient():
 	user_msg = StringVar()
 	user_msg.set('Enter message here')
 	scrollbar = Scrollbar(frame)
-	messages = Listbox(frame, height = 15, width = 85, yscrollcommand = scrollbar.set)
+	messages = Listbox(frame, height = 15, width = 100, yscrollcommand = scrollbar.set)
 	scrollbar.pack(side = RIGHT, fill = Y)
 	messages.pack(side = LEFT, fill = BOTH)
 	messages.pack()
@@ -87,15 +89,18 @@ def startClient():
 
 	except Exception as e:
 		print('Server not found due to error: {}'.format(e))
-		messages.insert(END, 'Connection with server cannot be made. Hit <Send> to close window.')
+		messages.insert(END, 'Connection with server cannot be made. Hit <SEND> to close window.')
 		closeWindow(user_msg, chat_window)
 		
 	try:
 		rcv_thread = Thread(target=receiveMsg, args=(messages, ))
 		rcv_thread.start()
 		chat_window.mainloop()
+
 	except KeyboardInterrupt:
 		print('KeyboardInterrupt - Force closing chat window')
+		client_socket.close()
+		chat_window.quit()
 		sys.exit(1)
 
 if __name__ == '__main__':

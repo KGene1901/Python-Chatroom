@@ -1,0 +1,46 @@
+Instant Messenger (IM) Application Protocol
+--------------------------------------------
+
+This document outlines the protocol defined for communication between the client(s) and the IM server:
+
+1. 	Messages that can be sent within the application:
+		=> normal (text-based) words/sentences which covers:
+			- the modern English alphabet (a-z / A-Z)
+			- numbers (1, 2, 3, ...)
+			- and any special keyboard symbols (!, ?, @, ...)
+
+		=> in-app user commands:
+			- /help ==> To list all available user commands
+			- /rename <username> ==> To change your own username
+			- /whisper <username> <message> ==> To privately message another user in the chatroom
+			- /listUsers ==> To list all current users in the chatroom
+			- /quit ==> To exit the chatroom
+
+2.	Responses:
+		=> When a client first joins the server:
+			- he/she will be greeted with the welcome message: "Welcome to the chatroom {username}! Type /help for a list of chatroom commands.
+			- all connected clients (excluding the newly connected one) will also be notified of this incoming connection with the message "{username} has joined"
+
+		=> When a client sends a normal message:
+			- the server will broadcast this message to all clients connected (including the sender) to the server which should lead to the message being displayed on every client
+
+		=> When a client sends a user command:
+			- /help ==> the server will send back a string (separated by line breaks "\n") which contains a list of user commands with their respective descriptions to only the client that requested for it (it is not broadcasted)
+			
+			- /rename <username> ==> if the username is already taken by another client, the server will send the error message "This username has been taken. Please try again with /rename <username>" back to the client who requested for the change
+								 ==> if the username is available, the server will allow it to happen and broadcast the message "{old username} has changed their username to {new username}" to all connected clients (even the client who requested for the name change)
+
+			- /whisper <username> <message> ==> if the user requested is not in the server, the server will reject the request send the error message "This user does not exist" to the client that requested the private message
+											==> if the client tries to private message his/her ownself, the server will reject the request send the error message "Not allowed to private message your ownself!" to that client 
+											==> if the user requested is available, the server will send the message from sender client to the receiver client (1 to 1 communication) with the format "(private) {username}: {message}" (Both the clients should receive the private message)
+
+
+			- /listUsers ==> the server will send back a string (separated by line breaks "\n") containing a list of usernames (connected clients) to the client that requested for it
+
+			- /quit ==> a client's disconnection will be detected by the server and it will pop the client's information from its temporary memory followed by broadcasting the message "{username} has disconnected" to all remaining connected clients
+
+3. 	Clients are allowed to send messages in the formats as described in PART 1 above while the server sends messages as defined in the RESPONSES part of the document. 
+
+4. 	Design choices:
+	
+   	My decision to choose multi-threading over select() to handle multiple client connections for the IM server was due to the fact that the overall structure was cleaner and easier to manage connection states. Furthermore, all regular messages and user commands (except "/quit") are coded to be handled by the server as I not only wanted to keep the client code simple, but to also ensure all responses and logic are centralized and standardized in the server side to allow easy code updates and improvements. For sending responses or redirecting messages, I created a separate function for broadcasting messages in the server side code to reduce code redundancy and for ease of use as it is dynamic (it can take in any string message) and it complements the built-in send/sendall function by sending to all connected clients. In terms of the client side, I made a simple GUI to allow better readability of chat and to make the application look more formal overall. I also ensured that a client was not able to send empty messages to the server to avoid a disconnection issue as the server might assume that the client was not active anymore.
