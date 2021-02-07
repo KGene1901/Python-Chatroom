@@ -1,7 +1,7 @@
 # Python-Chatroom
 
 ## Overview
-Assignment for Networks and Systems module at Durham University (2nd Second Computer Science)<br><br>The application is split into two programs, **client.py** and **server.py**, and uses the idea of sockets and multithreading for multiuser real-time communications. The programs in folder **Part 1** only allows users to communicate pubicly without any extra functionalities whereas folder **Part 2** has the extended programs that gives users extra functionalities in the chatroom. 
+Assignment for Networks and Systems module at Durham University (2nd Second Computer Science)<br><br>The application is split into two programs, **client.py** and **server.py**, and uses the idea of sockets and multithreading for multiuser real-time communications. The programs in folder **Version 1** is compatible with Python 3.6 (and over) while folder **Version 2** is compatible with Python 3.5 (and over) as it does not make use of formattted strings.
 
 ## Tools Used
 **Programming Language**:
@@ -17,9 +17,10 @@ Assignment for Networks and Systems module at Durham University (2nd Second Comp
 
 ## How To Run
 To run client.py:<br>
-`python client.py <your own username> 127.0.0.1 8080`<br>
+format: python client.py \<username\> \<host address\> \<port number\> <br>
+example: `python client.py user1 127.0.0.1 8080`<br>
 
 To run server.py:<br>
-`python server.py`
+format: python server.py \<port number\> <br>
+example: `python server.py 8080`
 
-\*While running **client.py** from folder **Part 2**, type */help* in the chatroom GUI to display the extra commands available. 
