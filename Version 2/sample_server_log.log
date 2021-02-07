@@ -1,0 +1,79 @@
+Server is running and ready to recieve connection at port 12000...
+
+Recieved connection from ('127.0.0.1', 53726) with username jason01
+jason01 has joined
+Thread: 1 initialised
+jason01: hello
+jason01: is anyone there?
+jason01: /help
+
+<<Available commands>>
+/listUsers => To list all current users in the chatroom
+/rename <username> => Change your own username
+/whisper <username> <message> => To privately message another user in the chatroom
+/quit => Exit chatroom
+
+
+Recieved connection from ('127.0.0.1', 53727) with username puffinxx
+puffinxx has joined
+Thread: 2 initialised
+jason01: oh hello puffin
+puffinxx: heyy jason. what's up
+jason01: I'm doing alright
+puffinxx: is anyone else here?
+puffinxx: /listUsers
+
+<<Users>>
+1. puffinxx
+2. jason01
+
+
+puffinxx: oh only the both of us
+jason01: pretty much
+Recieved connection from ('127.0.0.1', 53736) with username emily97
+emily97 has joined
+Thread: 3 initialised
+puffinxx: oh hey Emily
+emily97: /listUsers
+
+<<Users>>
+1. puffinxx
+2. jason01
+3. emily97
+
+
+emily97: hey what's up guys
+jason01: /whisper puffinxx do you know who she is?
+(private) jason01: do you know who she is?
+puffinxx: /whisper puffinxx no clue man
+[Server] Not allowed to private message your ownself!
+puffinxx: /whisper puffinxx no clue man
+[Server] Not allowed to private message your ownself!
+puffinxx: /whisper jason01 no clue man
+(private) puffinxx: no clue man
+emily97: /rename rose10
+emily97 has changed their username to rose10
+jason01: oh nice
+jason01: i'll be heading out now guys
+puffinxx: alright see ya
+rose10:  see ya puffin
+jason01 has left
+puffinxx: /listUsers
+
+<<Users>>
+1. rose10
+2. puffinxx
+
+
+puffinxx has left
+rose10: /help
+
+<<Available commands>>
+/listUsers => To list all current users in the chatroom
+/rename <username> => Change your own username
+/whisper <username> <message> => To privately message another user in the chatroom
+/quit => Exit chatroom
+
+
+rose10 has left
+KeyboardInterrupt - Force closing server
